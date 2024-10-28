@@ -1,50 +1,45 @@
 .slot-machine {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 20px;
-  }
-  
-  .slot-container {
-    display: flex;
-    gap: 10px;
-    overflow: hidden;
-    height: 80px;
-  }
-  
-  .slot {
-    width: 80px;
-    height: 480px; /* 6 奖品，每个高度 80px */
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .prize {
-    width: 80px;
-    height: 80px;
-    font-size: 48px;
-    text-align: center;
-    line-height: 80px;
-  }
-  
-  .roll-button {
-    margin-top: 16px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    background-color: #4caf50;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .roll-button:disabled {
-    background-color: #9e9e9e;
-    cursor: not-allowed;
-  }
-  
-  .roll-button:hover:not(:disabled) {
-    background-color: #45a049;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.slot-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.slot {
+  width: 80px;
+  height: 80px;
+  font-size: 48px;
+  text-align: center;
+  line-height: 80px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+.roll-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.roll-button:disabled {
+  background-color: #9e9e9e;
+  cursor: not-allowed;
+}
+
+.roll-button:hover:not(:disabled) {
+  background-color: #45a049;
+}

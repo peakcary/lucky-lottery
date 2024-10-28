@@ -1,57 +1,51 @@
-import React, { useState } from 'react';
-import { useSpring, animated, config } from '@react-spring/web';
-import './index.css';
+import React, { useState, useEffect, useRef } from 'react';
+import './index.css'; // 引入样式
 
-const prizes = ['🍒', '🍋', '🍉', '⭐', '🔔', '🍇']; // 奖品列表
+const prizes = ['🍒', '🍋', '🍉', '⭐', '🔔', '🍇']; // 可定制奖品
 
-const SlotMachine = ({ onFinish, controlledResult }) => {
-  const [rolling, setRolling] = useState(false); // 控制滚动状态
-  const [slots, setSlots] = useState([0, 0, 0]); // 每个滚轮的奖品索引
+const SlotMachine = ({ onFinish }) => {
+  const [rolling, setRolling] = useState(false);
+  const [slots, setSlots] = useState([0, 0, 0]); // 每个滚轮的当前索引
+  const intervalRefs = useRef([]);
 
-  // 使用 useSpring 为每个滚轮创建动画
-  const [spring1, api1] = useSpring(() => ({ transform: 'translateY(0px)', config: config.wobbly }));
-  const [spring2, api2] = useSpring(() => ({ transform: 'translateY(0px)', config: config.wobbly }));
-  const [spring3, api3] = useSpring(() => ({ transform: 'translateY(0px)', config: config.wobbly }));
-
-  // 点击按钮时的抽奖逻辑
+  // 开始滚动
   const handleRoll = () => {
-    if (rolling) return; // 如果正在滚动，则阻止重复点击
-    setRolling(true); // 设置滚动状态
+    if (rolling) return; // 防止重复触发
+    setRolling(true);
 
-    // 生成新的奖品索引（或使用受控结果）
-    const target = controlledResult || Array(3).fill().map(() => Math.floor(Math.random() * prizes.length));
-    setSlots(target); // 更新 slots，触发重新渲染
+    // 启动滚轮动画
+    intervalRefs.current = slots.map((_, index) =>
+      setInterval(() => {
+        setSlots((prev) => {
+          const newSlots = [...prev];
+          newSlots[index] = (newSlots[index] + 1) % prizes.length;
+          return newSlots;
+        });
+      }, 100 + index * 100) // 每个滚轮有微小延迟
+    );
 
-    // 触发每个滚轮的动画
-    api1.start({ transform: `translateY(-${target[0] * 80}px)` });
-    api2.start({ transform: `translateY(-${target[1] * 80}px)` });
-    api3.start({ transform: `translateY(-${target[2] * 80}px)` });
+    // 设置滚轮停止时间
+    setTimeout(() => stopRoll(), 3000); // 所有滚轮停下时间
+  };
 
-    // 3 秒后停止，并触发回调函数
-    setTimeout(() => {
-      setRolling(false); // 重置滚动状态
-      onFinish && onFinish(target.map((i) => prizes[i])); // 返回结果
-    }, 3000);
+  // 停止滚动并计算结果
+  const stopRoll = () => {
+    intervalRefs.current.forEach((ref) => clearInterval(ref));
+    intervalRefs.current = [];
+    setRolling(false);
+
+    const result = slots.map((index) => prizes[index]);
+    onFinish && onFinish(result); // 返回抽奖结果
   };
 
   return (
     <div className="slot-machine">
       <div className="slot-container">
-        <animated.div className="slot" style={spring1}>
-          {prizes.map((prize, i) => (
-            <div key={i} className="prize">{prize}</div>
-          ))}
-        </animated.div>
-        <animated.div className="slot" style={spring2}>
-          {prizes.map((prize, i) => (
-            <div key={i} className="prize">{prize}</div>
-          ))}
-        </animated.div>
-        <animated.div className="slot" style={spring3}>
-          {prizes.map((prize, i) => (
-            <div key={i} className="prize">{prize}</div>
-          ))}
-        </animated.div>
+        {slots.map((slot, index) => (
+          <div key={index} className="slot">
+            {prizes[slot]}
+          </div>
+        ))}
       </div>
       <button className="roll-button" onClick={handleRoll} disabled={rolling}>
         {rolling ? 'Rolling...' : 'Start'}

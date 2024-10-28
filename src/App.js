@@ -1,14 +1,12 @@
 import React from 'react';
-import FlipCardLottery1 from './components/FlipCardLottery1';
+import ScratchCardComponent from './components/ScratchCardComponent';
 
 const App = () => {
-  const handleFinish = (prize) => {
-    alert(`Congratulations! You won: ${prize}`);
-  };
+  
 
   return (
     <div>
-      <FlipCardLottery1 maxAttempts={3} onFinish={handleFinish} />
+      <ScratchCardComponent  />
     </div>
   );
 };

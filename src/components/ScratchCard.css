@@ -1,0 +1,29 @@
+.scratch-card {
+    position: relative;
+    width: 300px;
+    height: 150px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .prize {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: gold;
+    text-align: center;
+    z-index: 1; /* 始终在底层 */
+  }
+  
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2; /* 涂层在最上方 */
+    cursor: crosshair;
+  }
